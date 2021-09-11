@@ -100,7 +100,7 @@
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">ﾃ�</button>
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">�ｾ�ｿｽ</button>
                               <h3 id="myModalLabel">Delete Confirmation</h3>
                             </div>
                             <div class="modal-body">
@@ -123,6 +123,15 @@
 
                   </tbody>
                 </table>
+              </div>
+              <div class="row" align="center" >
+<!--URLパスパラメータ--><a th:href="@{/csv/{userId}/{date}.csv(userId=${allTask[0].userId}, date=${#dates.format(new java.util.Date(),'yyyy-MM-dd')})}">
+<!--リクエストパラメータ--><!-- <a th:href="@{/csv(userId=${allTask[0].userId}, date=${#dates.format(new java.util.Date(),'yyyy-MM-dd')})}"> --> 
+                  <span class="btn btn-danger" value="CSV出力">CSVダウンロード</span>
+                </a>
+                <a th:href="@{/download/{userId}(userId=${allTask[0].userId})}">
+                  <span class="btn btn-success" value="画像ダウンロード"></span>
+                </a>
               </div>
 
             </div>
@@ -172,7 +181,7 @@
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">ﾃ�</button>
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">�ｾ�ｿｽ</button>
                               <h3 id="delModalLabel">Delete Confirmation</h3>
                             </div>
                             <div class="modal-body">

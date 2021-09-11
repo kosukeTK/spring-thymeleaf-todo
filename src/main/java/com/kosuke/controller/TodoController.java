@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -37,6 +39,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -153,17 +156,25 @@ public class TodoController {
 	 * @param response
 	 * @return
 	 */
-	@GetMapping (value = "/download", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StreamingResponseBody> download(final HttpServletResponse response) {
-
+	@GetMapping (value = "/download/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<StreamingResponseBody> download(
+    		@PathVariable("userId") int userId, 
+    		final HttpServletResponse response) {
+		
+		LocalDateTime localDateTime = LocalDateTime.now();
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		String nowTime = dateTimeFormatter.format(localDateTime);
+		
         response.setContentType("application/zip");
         response.setHeader(
                 "Content-Disposition",
-                "attachment;filename=sample.zip");
+                "attachment;filename=" + nowTime + ".zip");
         
         StreamingResponseBody stream = out -> {
 //            final String home = System.getProperty("user.home");
-            final File directory = new File("C:\\Users\\torit\\eclipse-workspace\\todo\\src\\main\\resources\\static\\image");
+//        	File directory = new File(task.getImageDir());
+            final File directory = new File(
+            		"C:\\Users\\torit\\eclipse-workspace\\todo\\src\\main\\resources\\static\\image\\" + Integer.toString(userId));
             final ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream());
 
             if(directory.exists() && directory.isDirectory()) {
@@ -187,7 +198,7 @@ public class TodoController {
         };
         System.out.println(stream);
         logger.info("steaming response {} ", stream);
-        return new ResponseEntity(stream, HttpStatus.OK);
+        return new ResponseEntity<StreamingResponseBody>(stream, HttpStatus.OK);
     }
 	
 	/**
@@ -196,11 +207,13 @@ public class TodoController {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@GetMapping(value="/{userId}/*.csv", 
+	@GetMapping(value="/csv/{userId}/*.csv",//URLパスパラメータ
+//	@GetMapping(value="/csv", 				//リクエストパラメータ
 				produces = MediaType.APPLICATION_OCTET_STREAM_VALUE + "; "
 						+ "charset=Shift_JIS; Content-Disposition: attachment")
 	@ResponseBody
-	public Object getCsv(@PathVariable("userId") int userId) throws JsonProcessingException {
+	public Object getCsv(@PathVariable("userId") int userId) throws JsonProcessingException { //URLパスパラメータ
+//	public Object getCsv(@RequestParam("userId") int userId) throws JsonProcessingException { //リクエストパラメータ
 		List<Task> task = taskService.findByUserId(userId);
 		CsvMapper mapper = new CsvMapper();
 		mapper.registerModules(new JavaTimeModule());
