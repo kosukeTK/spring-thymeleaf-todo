@@ -1,4 +1,4 @@
-package com.kosuke.model;
+package com.kosuke.user;
 
 import java.util.Objects;
 
@@ -41,7 +41,13 @@ public class User {
 
 	@Column(name = "role")
 	private int role;
-
+	
+	@Column(name = "enabled")
+	private boolean enabled = false;
+	
+	@Column(name = "locked")
+	private boolean locked = false;
+	
 	public User() {
 	}
 
@@ -117,5 +123,21 @@ public class User {
 	public int hashCode() {
 
 		return Objects.hash(id, username, password, password_2, email, role);
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 }

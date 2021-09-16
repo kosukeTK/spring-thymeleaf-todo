@@ -17,7 +17,7 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.kosuke.controller.TodoController;
+import com.kosuke.todo.TodoController;
 
 class TodoControllerTest {
 	

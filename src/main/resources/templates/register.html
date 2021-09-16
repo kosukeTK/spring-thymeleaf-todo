@@ -51,7 +51,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-envelope"></i>
                   </div>
-                  <input th:field="*{email}" type="email" name="register_email" class="form-control" placeholder="Email" required="required" value="" />
+                  <input th:field="*{email}" type="email" name="register_email" class="form-control" id="email" placeholder="Email" required="required" value="" />
                 </div>
               </div>
               <div class="form-group ">
@@ -85,19 +85,32 @@
   <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
   <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
   <script>
-			var password = document.getElementById("password"), confirm_password = document
-					.getElementById("confirm_password");
+			const	password = document.getElementById("password"); 
+			const	confirm_password = document.getElementById("confirm_password");
+			const email = document.getElementById('email');
 
 			function validatePassword() {
+					console.log(password.value);
 				if (password.value != confirm_password.value) {
 					confirm_password.setCustomValidity("Passwords Don't Match");
 				} else {
 					confirm_password.setCustomValidity('');
 				}
 			}
+			
+			const validateEmail = () => {
+				console.log(email.value);
+				if (!email.value.match(/.+@.+\..+/)) {
+					email.setCustomValidity("Email Illegal!"); 
+				} else {
+					email.setCustomValidity(''); 
+				}
+			}
+			
+			email.onblur = validateEmail;
 			password.onchange = validatePassword;
 			confirm_password.onkeyup = validatePassword;
-		</script>
+	</script>
 
 </body>
 </html>

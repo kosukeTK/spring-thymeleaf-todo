@@ -18,3 +18,12 @@ $(document).ready(function(){
         labelEndTop: 5
     });
 });
+
+/*const tableSort = (column) => {
+	let taskTable = [];
+	taskTable = document.querySelectorAll("td");
+	taskTable.forEach(task => console.log(task));
+	
+	console.log(column);
+}*/
+

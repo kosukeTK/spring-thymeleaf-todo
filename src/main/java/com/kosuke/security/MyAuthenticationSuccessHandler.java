@@ -58,6 +58,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
         } else if (isUser(roles)) {
             return "/home";
         } else {
+        	System.out.println("失敗");
             return "/login?error";
         }
     }

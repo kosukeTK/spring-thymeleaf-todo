@@ -1,8 +1,6 @@
-package com.kosuke.service;
+package com.kosuke.user;
 
 import java.util.Collection;
-
-import com.kosuke.model.User;
 
 /**
  * The UserService interface
@@ -26,4 +24,8 @@ public interface UserService {
     User findByEmail(String email);
 
     Collection<User> findAll();
+    
+    String confirmToken(String token);
+    
+    int enableUser(String email);
 }

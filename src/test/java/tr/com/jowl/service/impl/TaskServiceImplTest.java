@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.kosuke.model.Task;
-import com.kosuke.service.TaskService;
+import com.kosuke.todo.Task;
+import com.kosuke.todo.TaskService;
 import com.kosuke.utils.Status;
 
 import java.time.LocalDate;

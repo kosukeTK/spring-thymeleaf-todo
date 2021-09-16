@@ -1,11 +1,9 @@
-package com.kosuke.repository;
+package com.kosuke.todo;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import com.kosuke.model.Task;
 
 import java.util.List;
 

@@ -1,10 +1,9 @@
 package com.kosuke.security;
 
-import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.kosuke.model.User;
-import com.kosuke.service.UserService;
-
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +12,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.kosuke.user.User;
+import com.kosuke.user.UserService;
 
 /**
  * The AuthUserDetailsService class
@@ -38,16 +37,15 @@ public class AuthUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        boolean enabled = true;
+//        boolean enabled = true;
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
-
         User user = getUserDetail(username);
         if (user != null) {
             springUser = new org.springframework.security.core.userdetails.User(user.getUsername(),
                     user.getPassword(),
-                    enabled,
+                    BooleanUtils.toBoolean(user.isEnabled()),//enabled,
                     accountNonExpired,
                     credentialsNonExpired,
                     accountNonLocked,

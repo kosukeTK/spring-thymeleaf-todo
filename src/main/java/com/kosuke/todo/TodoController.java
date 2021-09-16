@@ -1,29 +1,4 @@
-package com.kosuke.controller;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.kosuke.config.Property;
-import com.kosuke.model.Task;
-import com.kosuke.service.TaskService;
-import com.kosuke.utils.Status;
+package com.kosuke.todo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,13 +10,32 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-
-import javax.servlet.http.HttpServletResponse;
+import com.kosuke.global.GlobalController;
+import com.kosuke.utils.Status;
 
 /**
  * The TodoController  Class
@@ -61,16 +55,21 @@ public class TodoController {
     @Autowired
     private GlobalController globalController;
 
+    /**
+     * TASK新規登録
+     * @param reqTask
+     * @param redirectAttributes
+     * @return home
+     */
     @RequestMapping(value = {"/task/saveTask"}, method = RequestMethod.POST)
     public String saveTodo(@ModelAttribute("reqTask") Task reqTask,
                            final RedirectAttributes redirectAttributes) {
         logger.info("/task/save");
         try {
-        	//ファイルアップロード
             reqTask.setCreateDate(LocalDateTime.now());
             reqTask.setStatus(Status.ACTIVE.getValue());
             reqTask.setUserId(globalController.getLoginUser().getId());
-            if(reqTask.getTaskImage().getName().equals("")) {
+            if(!reqTask.getTaskImage().getOriginalFilename().equals("")) {
             	taskService.uploadTaskImage(reqTask);
             }
             taskService.save(reqTask);
@@ -83,6 +82,12 @@ public class TodoController {
         return "redirect:/home";
     }
 
+    /**
+     * TASK編集
+     * @param editTask
+     * @param model
+     * @return edit
+     */
     @RequestMapping(value = {"/task/editTask"}, method = RequestMethod.POST)
     public String editTodo(@ModelAttribute("editTask") Task editTask, Model model) {
         logger.info("/task/editTask");
@@ -103,6 +108,14 @@ public class TodoController {
     }
 
 
+    /**
+     * TASK削除、編集
+     * @param operation
+     * @param id
+     * @param redirectAttributes
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/task/{operation}/{id}", method = RequestMethod.GET)
     public String todoOperation(@PathVariable("operation") String operation,
                                 @PathVariable("id") int id, final RedirectAttributes redirectAttributes,

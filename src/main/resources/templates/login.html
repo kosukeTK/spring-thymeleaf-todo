@@ -9,6 +9,9 @@
   <br />
   <hr />
   <div class="separator"></div>
+  <form id="admin_login" name="admin_form" class="row" th:action="@{/login}">
+    <input id="admin_btn" type="button" class="btn btn-default pull-right" style="margin-right: 20px;" value="administrator" />
+  </form>
   <div class="row">
     <div class="container">
 <!--       <img th:src="@{/static/image/osasimi.jpg}" /> -->
@@ -22,6 +25,7 @@
 
             <div th:if="${param.error}" class="alert alert-danger alert-dismissable">
               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <p th:text="${param.error}"></p>
               Invalid username or password.
             </div>
             <form th:action="@{/login}" method="post" class="form-horizontal">
@@ -42,7 +46,8 @@
                 </div>
               </div>
               <div class="form-group">
-                <input type="checkbox" id="rememberMe" /> <label for="rememberMe">Remember Me </label> <a href="#" class="pull-right">Forgot password?</a>
+                <input type="checkbox" id="rememberMe" /> <label for="rememberMe">Remember Me </label> 
+                <a href="#" class="pull-right">Forgot password?</a>
               </div>
               <input type="submit" value="Login" class="btn btn-success btn-custom" />
 
@@ -55,9 +60,26 @@
   <div id="footerSeparator"></div>
   <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
   <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script type="text/javascript">
+  	const login_btn = document.getElementById("admin_btn");
+  // テスト系の場合ADMINISTRATORボタンを表示
+		if(location.host === "localhost:8080") {
+			document.getElementById("admin_login").style.display ="block";
+		}	else {
+			document.getElementById("admin_login").style.display ="none";
+		}
+		
+		const adminLogin = () => {
+			document.forms["admin_login"].username.value = "administrator";
+			document.forms["admin_login"].password.value = "root";
+			document.forms["admin_login"].submit();
+		}
+		
+		login_btn.addEventListener("click", adminLogin());
+  </script>
   <footer>
     <div th:replace="fragments/footer :: footer">&copy; 2016 pironix</div>
   </footer>
-
 </body>
 </html>

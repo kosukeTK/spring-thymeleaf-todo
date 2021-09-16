@@ -1,4 +1,4 @@
-package com.kosuke.controller;
+package com.kosuke.global;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.kosuke.model.User;
-import com.kosuke.service.UserService;
+import com.kosuke.user.User;
+import com.kosuke.user.UserService;
 
 /**
  * The GlobalController  Class

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.kosuke.model.User;
-import com.kosuke.service.UserService;
+import com.kosuke.user.User;
+import com.kosuke.user.UserService;
 import com.kosuke.utils.PassEncoding;
 import com.kosuke.utils.Roles;
 

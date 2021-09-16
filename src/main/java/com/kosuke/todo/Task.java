@@ -1,4 +1,4 @@
-package com.kosuke.model;
+package com.kosuke.todo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

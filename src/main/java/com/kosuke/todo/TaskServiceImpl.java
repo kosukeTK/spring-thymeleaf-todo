@@ -1,4 +1,4 @@
-package com.kosuke.service.impl;
+package com.kosuke.todo;
 
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,9 +6,6 @@ import org.springframework.security.config.web.server.ServerHttpSecurity.HeaderS
 import org.springframework.stereotype.Service;
 
 import com.kosuke.config.Property;
-import com.kosuke.model.Task;
-import com.kosuke.repository.TaskRepository;
-import com.kosuke.service.TaskService;
 
 import javax.transaction.Transactional;
 
@@ -118,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
 		String userId = Integer.toString(reqTask.getUserId());
 		String fileName = reqTask.getTaskImage().getOriginalFilename().toString();
 		//タスクIDを定義
-		String taskId = Integer.toString(findMaxTaskId(reqTask.getUserId()) + 1);
+//		String taskId = Integer.toString(findMaxTaskId(reqTask.getUserId()) + 1);
 		//ファイル存在チェック
 		if (reqTask.getTaskImage().isEmpty()) {
 			return;
@@ -132,16 +129,16 @@ public class TaskServiceImpl implements TaskService {
 		try {
 			//ユーザーディレクトリを作成
 			File uploadUserDirFile = new File(baseDir, userId);
-			if(!uploadUserDirFile.exists()) {
+			if(!uploadUserDirFile.isDirectory()) {
 				uploadUserDirFile.mkdir();
 			}
-			//タスクディレクトリを作成
-			File uploadDirFile = new File(uploadUserDirFile, taskId);
-			if(!uploadDirFile.exists()) {
-				uploadDirFile.mkdir();
-			}
+//			//タスクディレクトリを作成
+//			File uploadDirFile = new File(uploadUserDirFile, taskId);
+//			if(!uploadDirFile.exists()) {
+//				uploadDirFile.mkdir();
+//			}
 			//ファイルをアップロード
-			File uploadFile = new File(uploadDirFile + "/" + fileName);
+			File uploadFile = new File(uploadUserDirFile + "/" + fileName);
 			byte[] bytes = reqTask.getTaskImage().getBytes();
 			BufferedOutputStream uploadFileStream = 
 					new BufferedOutputStream(new FileOutputStream(uploadFile));
@@ -151,8 +148,5 @@ public class TaskServiceImpl implements TaskService {
 		} catch (Exception e) {
 			System.out.println("ファイルアップロード失敗");
 		}
-		
-		
-		
 	}
 }

@@ -1,11 +1,9 @@
-package com.kosuke.service;
+package com.kosuke.todo;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import com.kosuke.model.Task;
 
 import java.util.List;
 
@@ -41,4 +39,5 @@ public interface TaskService {
 	void uploadTaskImage(Task reqTask);
 	
 	List<Task> findByUserId(int userId);
+
 }
