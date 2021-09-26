@@ -9,7 +9,9 @@
   <br />
   <hr />
   <div class="separator"></div>
-  <form id="admin_login" name="admin_form" class="row" th:action="@{/login}">
+  <form id="admin_login" name="admin_form" class="row" th:action="@{/login}" method="post">
+    <input type="hidden" name="username" />
+    <input type="hidden" name="password" />
     <input id="admin_btn" type="button" class="btn btn-default pull-right" style="margin-right: 20px;" value="administrator" />
   </form>
   <div class="row">
@@ -27,6 +29,10 @@
               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
               <p th:text="${param.error}"></p>
               Invalid username or password.
+            </div>
+            <div th:if="${msg eq 'confirm'}" class="success">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <p th:text="${msgText}"></p>
             </div>
             <form th:action="@{/login}" method="post" class="form-horizontal">
               <div class="form-group ">
@@ -63,7 +69,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script type="text/javascript">
   	const login_btn = document.getElementById("admin_btn");
-  // テスト系の場合ADMINISTRATORボタンを表示
+  	
 		if(location.host === "localhost:8080") {
 			document.getElementById("admin_login").style.display ="block";
 		}	else {
@@ -71,12 +77,12 @@
 		}
 		
 		const adminLogin = () => {
-			document.forms["admin_login"].username.value = "administrator";
-			document.forms["admin_login"].password.value = "root";
+			document.forms["admin_login"].username.value = "take";
+			document.forms["admin_login"].password.value = "ziabisu1";
 			document.forms["admin_login"].submit();
 		}
 		
-		login_btn.addEventListener("click", adminLogin());
+		login_btn.addEventListener("click", adminLogin);
   </script>
   <footer>
     <div th:replace="fragments/footer :: footer">&copy; 2016 pironix</div>

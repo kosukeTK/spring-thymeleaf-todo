@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +29,11 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kosuke.global.GlobalController;
+import com.kosuke.utils.OutputCSV;
 import com.kosuke.utils.Status;
+
+import lombok.AllArgsConstructor;
 
 /**
  * The TodoController  Class
@@ -45,16 +43,15 @@ import com.kosuke.utils.Status;
  * Date 2021/8/15.
  */
 @Controller
-@ComponentScan
+@AllArgsConstructor
 public class TodoController {
 
     private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
+    
+    private final TaskService taskService;
 
-    @Autowired
-    private TaskService taskService;
-    @Autowired
-    private GlobalController globalController;
-
+    private final GlobalController globalController;
+    
     /**
      * TASK新規登録
      * @param reqTask
@@ -228,9 +225,6 @@ public class TodoController {
 	public Object getCsv(@PathVariable("userId") int userId) throws JsonProcessingException { //URLパスパラメータ
 //	public Object getCsv(@RequestParam("userId") int userId) throws JsonProcessingException { //リクエストパラメータ
 		List<Task> task = taskService.findByUserId(userId);
-		CsvMapper mapper = new CsvMapper();
-		mapper.registerModules(new JavaTimeModule());
-		CsvSchema schema = mapper.schemaFor(Task.class).withHeader();
-		return mapper.writer(schema).writeValueAsString(task);
+		return OutputCSV.write(task);
 	}
 }

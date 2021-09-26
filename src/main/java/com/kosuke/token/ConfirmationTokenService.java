@@ -3,13 +3,13 @@ package com.kosuke.token;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ConfirmationTokenService {
 	
 	@Autowired

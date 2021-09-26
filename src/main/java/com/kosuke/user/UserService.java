@@ -11,6 +11,10 @@ import java.util.Collection;
  */
 public interface UserService {
 
+    /**
+     * @param user
+     * @return
+     */
     User save(User user);
 
     Boolean delete(int id);
@@ -25,7 +29,7 @@ public interface UserService {
 
     Collection<User> findAll();
     
-    String confirmToken(String token);
-    
     int enableUser(String email);
+    
+    String confirmToken(String token);
 }

@@ -40,6 +40,8 @@ public class ConfirmationToken {
             name = "user_id"
     )
     private User user;
+    
+    public ConfirmationToken() {};
 
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,

@@ -2,7 +2,6 @@ package com.kosuke.todo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.kosuke.utils.TaskCategories;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * The Task Entity class
  *
@@ -31,6 +33,8 @@ import com.kosuke.utils.TaskCategories;
  * Date 2021/8/15.
  */
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name = "task", schema = "sampledb")
 @JsonPropertyOrder({"ID", "タスク名", "内容", "説明"})
 public class Task {
@@ -86,112 +90,112 @@ public class Task {
 	@JsonIgnore
 	private MultipartFile taskImage;
 
-	public Task() {}
+//	public Task() {}
 	
-	public String getImageDir() {
-		return imageDir;
-	}
-
-	public void setImageDir(String imageDir) {
-		this.imageDir = imageDir;
-	}
-
-	public MultipartFile getTaskImage() {
-		return taskImage;
-	}
-
-	public void setTaskImage(MultipartFile taskImage) {
-		this.taskImage = taskImage;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getTaskName() {
-		return taskName;
-	}
-
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public LocalDate getTaskDate() {
-		return taskDate;
-	}
-
-	public void setTaskDate(LocalDate taskDate) {
-		this.taskDate = taskDate;
-	}
-
-	public LocalDateTime getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(LocalDateTime createDate) {
-		this.createDate = createDate;
-	}
-
-	public TaskCategories getCategory() {
-		return category;
-	}
-
-	public void setCategory(TaskCategories category) {
-		this.category = category;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Task task = (Task) o;
-		return id == task.id && userId == task.userId && Objects.equals(taskName, task.taskName)
-				&& Objects.equals(description, task.description) && Objects.equals(content, task.content)
-				&& Objects.equals(taskDate, task.taskDate) && Objects.equals(createDate, task.createDate)
-				&& category == task.category && Objects.equals(status, task.status);
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(id, taskName, description, content, taskDate, createDate, category, status, userId);
-	}
+//	public String getImageDir() {
+//		return imageDir;
+//	}
+//
+//	public void setImageDir(String imageDir) {
+//		this.imageDir = imageDir;
+//	}
+//
+//	public MultipartFile getTaskImage() {
+//		return taskImage;
+//	}
+//
+//	public void setTaskImage(MultipartFile taskImage) {
+//		this.taskImage = taskImage;
+//	}
+//
+//	public int getId() {
+//		return id;
+//	}
+//
+//	public void setId(int id) {
+//		this.id = id;
+//	}
+//
+//	public String getTaskName() {
+//		return taskName;
+//	}
+//
+//	public void setTaskName(String taskName) {
+//		this.taskName = taskName;
+//	}
+//
+//	public String getDescription() {
+//		return description;
+//	}
+//
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
+//
+//	public String getContent() {
+//		return content;
+//	}
+//
+//	public void setContent(String content) {
+//		this.content = content;
+//	}
+//
+//	public LocalDate getTaskDate() {
+//		return taskDate;
+//	}
+//
+//	public void setTaskDate(LocalDate taskDate) {
+//		this.taskDate = taskDate;
+//	}
+//
+//	public LocalDateTime getCreateDate() {
+//		return createDate;
+//	}
+//
+//	public void setCreateDate(LocalDateTime createDate) {
+//		this.createDate = createDate;
+//	}
+//
+//	public TaskCategories getCategory() {
+//		return category;
+//	}
+//
+//	public void setCategory(TaskCategories category) {
+//		this.category = category;
+//	}
+//
+//	public String getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(String status) {
+//		this.status = status;
+//	}
+//
+//	public int getUserId() {
+//		return userId;
+//	}
+//
+//	public void setUserId(int userId) {
+//		this.userId = userId;
+//	}
+//
+//	@Override
+//	public boolean equals(Object o) {
+//		if (this == o)
+//			return true;
+//		if (o == null || getClass() != o.getClass())
+//			return false;
+//		Task task = (Task) o;
+//		return id == task.id && userId == task.userId && Objects.equals(taskName, task.taskName)
+//				&& Objects.equals(description, task.description) && Objects.equals(content, task.content)
+//				&& Objects.equals(taskDate, task.taskDate) && Objects.equals(createDate, task.createDate)
+//				&& category == task.category && Objects.equals(status, task.status);
+//	}
+//
+//	@Override
+//	public int hashCode() {
+//
+//		return Objects.hash(id, taskName, description, content, taskDate, createDate, category, status, userId);
+//	}
 }

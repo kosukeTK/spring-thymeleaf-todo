@@ -62,7 +62,7 @@
                 </div>
                 <textarea class="form-control" th:field="*{content}" placeholder="Details" required="required"></textarea>
                 <div class="form-group">
-                  <input th:field="*{taskImage}" type="file" class="form-control" placeholder="File Upload" />
+                  <input th:field="*{taskImage}" type="file" multiple="multiple" accept="image/*" class="form-control" placeholder="File Upload" />
                 </div>
                 <div class="float-right btn-send">
                   <button class="btn btn-success btn-md">

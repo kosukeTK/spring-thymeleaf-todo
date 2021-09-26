@@ -1,20 +1,18 @@
 package com.kosuke.todo;
 
-import org.apache.http.entity.ContentType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.web.server.ServerHttpSecurity.HeaderSpec.ContentTypeOptionsSpec;
-import org.springframework.stereotype.Service;
-
-import com.kosuke.config.Property;
-
-import javax.transaction.Transactional;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+
+import org.apache.http.entity.ContentType;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.kosuke.config.Property;
+
+import lombok.AllArgsConstructor;
 
 /**
  * The TaskServiceImpl class
@@ -24,14 +22,13 @@ import java.util.List;
  * Date 2021/8/15.
  */
 @Service
-@Transactional
+@AllArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
     
-    @Autowired
-    private Property property;
+    private final Property property;
 
     @Override
     public Task save(Task task) {
