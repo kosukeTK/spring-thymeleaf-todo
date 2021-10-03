@@ -1,4 +1,4 @@
-package tr.com.jowl.service.impl;
+package com.kosuke.todo;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +31,9 @@ class TaskServiceImplTest {
 
     @Autowired
     private TaskService taskService;
+    
+//    @Autowired
+//    private TaskRepository taskRepository;
 
     private static List<Task> taskList;
 
@@ -81,7 +84,7 @@ class TaskServiceImplTest {
 
         List<Task> inserted = taskService.findBetween(start + 1, end);
 
-        delete(inserted);
+ //       delete(inserted);
 
     }
 

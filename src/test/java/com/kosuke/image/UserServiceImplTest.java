@@ -1,4 +1,4 @@
-package tr.com.jowl.service.impl;
+package com.kosuke.image;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

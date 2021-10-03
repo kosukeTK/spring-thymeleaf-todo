@@ -191,8 +191,9 @@ public class UserController {
 	}
 	
 	@GetMapping ("/message")
-    public void showMessage(){
+    public String showMessage(Model model){
         String message = messagesource.getMessage("hoge", new String[]{"fuga"}, Locale.JAPAN);
-        System.out.println(message);
+        model.addAttribute("msg", message);
+        return "home";
     }
 }

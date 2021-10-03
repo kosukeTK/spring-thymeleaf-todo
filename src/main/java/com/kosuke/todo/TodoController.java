@@ -22,14 +22,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kosuke.global.GlobalController;
+import com.kosuke.image.Image;
+import com.kosuke.image.ImageService;
 import com.kosuke.utils.OutputCSV;
 import com.kosuke.utils.Status;
 
@@ -49,6 +53,8 @@ public class TodoController {
     private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
     
     private final TaskService taskService;
+    
+    private final ImageService imageService;
 
     private final GlobalController globalController;
     
@@ -226,5 +232,22 @@ public class TodoController {
 //	public Object getCsv(@RequestParam("userId") int userId) throws JsonProcessingException { //リクエストパラメータ
 		List<Task> task = taskService.findByUserId(userId);
 		return OutputCSV.write(task);
+	}
+	
+	/**
+	 * 複数ファイル保存
+	 * @param id
+	 * @param files
+	 * @param model
+	 * @return 
+	 */
+	@PostMapping(path="/task/image/{id}")
+	public String saveImage(@ModelAttribute("reqImage") Image reqImage, 
+							@PathVariable("id") int id, 
+							List<MultipartFile> files, 
+							Model model) {
+		imageService.saveImage(id, reqImage, files);
+		model.addAttribute("msg", "success");
+		return "home";
 	}
 }
