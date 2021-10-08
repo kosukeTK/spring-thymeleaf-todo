@@ -4,8 +4,12 @@
 package com.kosuke.image;
 
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
-import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.kosuke.todo.Task;
 
@@ -15,5 +19,9 @@ import com.kosuke.todo.Task;
  */
 public interface ImageService {
 	
-	public void saveImage(int id, Image reqImage, List<MultipartFile> files);
+	public List<Image> saveImage(Image image, Task task);
+	
+	public ResponseEntity<StreamingResponseBody> getAllImages(Task task, HttpServletResponse response);
+
+	public List<Image> findByImageName(String imageName, int taskId);
 }

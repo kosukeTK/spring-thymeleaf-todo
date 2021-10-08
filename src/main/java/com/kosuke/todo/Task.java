@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -97,7 +98,7 @@ public class Task {
 	@JsonIgnore
 	private MultipartFile taskImage;
 	
-	@OneToMany(mappedBy = "taskId", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Image> images = new ArrayList<>();
 

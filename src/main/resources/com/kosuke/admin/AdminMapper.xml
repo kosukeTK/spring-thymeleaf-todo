@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosuke.admin.AdminMapper">
+
+	<resultMap type="com.kosuke.user.User" id="result">
+		<result column="email" property="email" />
+		<collection property="taskList"
+			ofType="com.kosuke.todo.Task">
+			<result column="task_name" property="taskName" />
+		</collection>
+	</resultMap>
+
+	<select id="getEmail" resultMap="result">
+		SELECT u.email,
+					 t.task_name
+		FROM   user u
+		INNER JOIN task t
+		ON u.id = t.user_id
+		WHERE u.id = 1
+	</select>
+	
+</mapper>

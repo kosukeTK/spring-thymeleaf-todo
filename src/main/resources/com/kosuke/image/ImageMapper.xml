@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosuke.image.ImageMapper">
+	<resultMap id="imageSearchResult"
+		type="com.kosuke.image.Image">
+		<!-- <result property="task" column="task_id" /> -->
+	</resultMap>
+	<select id="findByImageName" resultMap="imageSearchResult">
+		SELECT *
+		FROM images
+		WHERE
+		image_name = #{imageName}
+		AND task_id = #{taskId}
+	</select>
+</mapper>

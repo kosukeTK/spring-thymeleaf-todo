@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -241,13 +242,49 @@ public class TodoController {
 	 * @param model
 	 * @return 
 	 */
-	@PostMapping(path="/task/image/{id}")
-	public String saveImage(@ModelAttribute("reqImage") Image reqImage, 
-							@PathVariable("id") int id, 
-							List<MultipartFile> files, 
+	@PostMapping(path="/image/save/{id}")
+	public String saveImage(@PathVariable("id")  int id, 
+							@ModelAttribute("image") Image image,
+							BindingResult result,
 							Model model) {
-		imageService.saveImage(id, reqImage, files);
-		model.addAttribute("msg", "success");
+		if(result.hasErrors()) {
+			System.out.println(result.getFieldError());
+			model.addAttribute("msg", "failed");
+			return "home";
+		}
+		Task task = taskService.findById(id);
+		//ディレクトリにファイルを配置、DBにファイルを保存
+		if(CollectionUtils.isEmpty(imageService.saveImage(image, task))) {
+			model.addAttribute("msg", "success");
+		} else {
+			model.addAttribute("msg", "fail");
+		}
+		return "home";
+	}
+	
+	
+	/**
+	 * 全ての画像を取得
+	 * @param id
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(path="/image/getAll/{id}")
+	@ResponseBody
+	public ResponseEntity<StreamingResponseBody> getAllImage(@PathVariable("id") int id,
+							  final HttpServletResponse response
+							  ) {
+		Task task = taskService.findById(id);
+		return imageService.getAllImages(task, response);
+		
+	}
+	
+	@GetMapping(path="image/{imageName}/{id}")
+	public String getImageFindName(	@PathVariable("imageName") String imageName,
+									@PathVariable("id") int taskId,
+									Model model) {
+		List<Image> imageList = imageService.findByImageName(imageName, taskId);
+		model.addAttribute("imageList", imageList);
 		return "home";
 	}
 }
