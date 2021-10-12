@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="fragments/header :: header-css">
 <title>Home</title>
 <meta name="description" content="spring-boot thymeleaf | home ">
-<div th:replace="fragments/header :: header-css"></div>
+<!-- <div th:replace="fragments/header :: header-css"></div> -->
 <script type="text/javascript" th:inline="javascript" th:src="@{/static/js/task.js}"></script>
 </head>
 <body>
@@ -102,7 +102,6 @@
                       <td th:text="${task.description}"></td>
                       <td th:text="${task.taskDate}"></td>
                       <td th:text="${task.content}"></td>
-                      <td th:hidden="${task.id}"></td>
                       <td align="center">
                         <!-- EDIT -->
                         <a th:href="@{/task/edit/{id}(id=${task.id})}">
@@ -195,15 +194,20 @@
                       <td th:text="${task.taskDate}"></td>
                       <td th:text="${task.content}"></td>
                       <td th:hidden="${task.id}"></td>
-                      <td align="center"><a th:href="@{/task/restore/{id}(id=${task.id})}"> <span class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="Restore Task"></span></a>
-                        &nbsp; &nbsp; <a data-toggle="modal" data-target="#modal-delete" th:attr="data-target='#modal-delete'+${task.id}"> <span class="glyphicon glyphicon-trash"
-                          data-toggle="tooltip" data-placement="top" title="Delete Permanently"></span></a></td>
+                      <td align="center">
+                        <a th:href="@{/task/restore/{id}(id=${task.id})}"> 
+                          <span class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="Restore Task"></span>
+                        </a>&nbsp; &nbsp; 
+                        <a data-toggle="modal" data-target="#modal-delete" th:attr="data-target='#modal-delete'+${task.id}"> 
+                          <span class="glyphicon glyphicon-trash"data-toggle="tooltip" data-placement="top" title="Delete Permanently"></span>
+                        </a>
+                      </td>
                       <!--start permanently delete modal-->
                       <div class="modal modal-delete" th:id="modal-delete+${task.id }">
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">�ｾ�ｿｽ</button>
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                               <h3 id="delModalLabel">Delete Confirmation</h3>
                             </div>
                             <div class="modal-body">
@@ -238,8 +242,8 @@
   <footer>
     <div class="separator" th:replace="fragments/footer :: footer">&copy; 2016 pironix</div>
   </footer>
-
   <script type="text/javascript">
+  		console.log($('#taskName').value)
 			$(function() {
 				$('#startDatePicker').datetimepicker({
 					defaultDate : 'now',
@@ -247,8 +251,7 @@
 					format : 'DD/MM/YYYY'
 				});
 			});
-		</script>
-  <script>
+			
 			$('#modal-toTrash').on(
 					'show.bs.modal',
 					function(e) {

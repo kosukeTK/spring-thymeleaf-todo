@@ -1,6 +1,5 @@
 package com.kosuke.image;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,13 +22,12 @@ import com.kosuke.todo.Task;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@SuppressWarnings("serial")
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "images", schema = "sampledb")
 //@IdClass(value=ImageKey.class)
-public class Image implements Serializable {
+public class Image {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,9 +53,6 @@ public class Image implements Serializable {
 	private Task task;
 	
 	@Transient
-	private int taskId;
-	
-	@Transient
 	private List<MultipartFile> files;
 	
 	public Image(List<MultipartFile> files) {
@@ -65,15 +60,12 @@ public class Image implements Serializable {
 	};
 
 	public Image(String imageName, String imagePath, byte[] imageData, LocalDateTime createDate, Task task) {
-		super();
 		this.imageName = imageName;
 		this.imagePath = imagePath;
 		this.imageData = imageData;
 		this.createDate = createDate;
 		this.task = task;
 	}
-	
-	
 	
 	
 }

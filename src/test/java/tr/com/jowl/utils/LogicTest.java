@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -46,5 +47,15 @@ class LogicTest {
 		FileInputStream inputStream = new FileInputStream(file);
 		byte[] bytes = IOUtils.toByteArray(inputStream);
 		System.out.println(bytes);
+	}
+	
+	@Test
+	public void RequestURLTest() throws IOException {
+		String str = "abcfefg";
+		if (str.contains("b")) {
+			System.out.println("test conp");
+		}
+//		HttpServletRequest request = mock(HttpServletRequest.class);
+//		System.out.println(request.getRequestURI());
 	}
 }

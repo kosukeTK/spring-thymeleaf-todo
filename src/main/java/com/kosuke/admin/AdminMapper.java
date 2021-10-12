@@ -9,6 +9,8 @@ import com.kosuke.user.User;
 @Mapper
 public interface AdminMapper {
 
-	List<User> getEmail();
+	List<User> findEmail();
+
+	List<User> findByEmailGetUserTodo(String email);
 
 }

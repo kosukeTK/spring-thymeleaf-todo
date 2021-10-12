@@ -3,22 +3,51 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kosuke.admin.AdminMapper">
-
-	<resultMap type="com.kosuke.user.User" id="result">
+	
+	<resultMap type="com.kosuke.user.User" id="resultFindEmail">
 		<result column="email" property="email" />
+	</resultMap>
+	<select id="findEmail" resultMap="resultFindEmail">
+		SELECT	u.email
+		FROM		user u
+	</select>
+	
+	<resultMap type="com.kosuke.user.User" id="resultFindByEmailGetUserTodo">
+		<result column="email" property="email" />
+		<result column="username" property="username" />
+		<result column="enabled" property="enabled" />
+		<result column="locked" property="locked" />
+		<result column="role" property="role" />
 		<collection property="taskList"
 			ofType="com.kosuke.todo.Task">
 			<result column="task_name" property="taskName" />
+			<result column="category" property="category" />
+			<result column="description" property="description" />
+			<result column="content" property="content" />
+			<result column="task_date" property="taskDate" />
+			<result column="create_date" property="createDate" />
+			<result column="user_id" property="userId" />
 		</collection>
 	</resultMap>
-
-	<select id="getEmail" resultMap="result">
-		SELECT u.email,
-					 t.task_name
-		FROM   user u
+	<select id="findByEmailGetUserTodo" resultMap="resultFindByEmailGetUserTodo">
+		SELECT	u.id,
+						u.email,
+						u.username,
+						u.enabled,
+						u.locked,
+						u.role,
+						t.task_name,
+						t.category,
+						t.description,
+						t.content,
+						t.status,
+						t.task_date,
+						t.create_date,
+						t.user_id
+		FROM		user u
 		INNER JOIN task t
 		ON u.id = t.user_id
-		WHERE u.id = 1
+		WHERE u.email = #{email}
 	</select>
 	
 </mapper>

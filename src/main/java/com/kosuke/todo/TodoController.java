@@ -285,6 +285,6 @@ public class TodoController {
 									Model model) {
 		List<Image> imageList = imageService.findByImageName(imageName, taskId);
 		model.addAttribute("imageList", imageList);
-		return "home";
+		return "";
 	}
 }

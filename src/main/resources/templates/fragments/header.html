@@ -5,28 +5,28 @@
 <div th:fragment="header-css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="spring boot, thymeleaf, spring data, todo application, ibrahim karayel" />
+  <meta name="keywords" content="spring boot, thymeleaf, spring data, todo application" />
 
-  <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
-  <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
-
-  <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="/webjars/font-awesome/5.0.10/web-fonts-with-css/css/fontawesome-all.min.css" />
-  <link th:href="@{/css/task.css}" rel="stylesheet" media="screen" />
+<!--   <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script> -->
+  <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
   <script th:src="@{/static/js/task.js}"></script>
-  <link rel="stylesheet" type="text/css" th:href="@{/static/css/site.css}" />
-  <!--<link rel="shortcut icon" href="/static/icons/favicon.ico">-->
-  <!--datetime picker-->
-  <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen" />
   <script th:src="@{/static/js/moment-with-locales.js}"></script>
   <script th:src="@{/static/js/bootstrap-datetimepicker.min.js}"></script>
+<!--   <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" /> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/webjars/font-awesome/5.0.10/web-fonts-with-css/css/fontawesome-all.min.css" />
+  <link th:href="@{/css/task.css}" rel="stylesheet" media="screen" />
+  <link rel="stylesheet" type="text/css" th:href="@{/static/css/site.css}" />
+  <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen" />
 </div>
 
 <div th:fragment="header-login-css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="spring boot, thymeleaf, spring data, todo application, ibrahim karayel" />
-  <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+  <meta name="keywords" content="spring boot, thymeleaf, spring data, todo application" />
+<!--   <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script> -->
+<!--   <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" /> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="/webjars/font-awesome/5.0.10/web-fonts-with-css/css/fontawesome-all.min.css" />
   <link rel="stylesheet" type="text/css" th:href="@{/static/css/site_login.css}" />
   <link rel="stylesheet" type="text/css" th:href="@{/static/css/site.css}" />

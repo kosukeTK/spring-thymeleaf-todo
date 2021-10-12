@@ -23,11 +23,15 @@ public class AdminService {
 //		adminMapper.findAll();
 	}
 
-	public List<User> getEmail() {
-		List<User> list = adminMapper.getEmail();
+	public List<User> findEmail() {
+		List<User> list = adminMapper.findEmail();
 //		return adminMapper.getEmail();
 		return list;
 		
+	}
+
+	public List<User> findByEmailGetUserTodo(String email) {
+		return adminMapper.findByEmailGetUserTodo(email);
 	}
 
 }
