@@ -4,7 +4,6 @@
 package com.kosuke.image;
 
 import java.util.List;
-import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,4 +23,6 @@ public interface ImageService {
 	public ResponseEntity<StreamingResponseBody> getAllImages(Task task, HttpServletResponse response);
 
 	public List<Image> findByImageName(String imageName, int taskId);
+
+	public List<Image> findByTaskId(int taskId);
 }

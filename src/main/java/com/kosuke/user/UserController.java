@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +26,7 @@ import com.kosuke.todo.TaskService;
 import com.kosuke.token.ConfirmationToken;
 import com.kosuke.token.ConfirmationTokenService;
 import com.kosuke.user.email.EmailSender;
+import com.kosuke.utils.LogUtils;
 import com.kosuke.utils.PassEncoding;
 import com.kosuke.utils.Roles;
 import com.kosuke.utils.Status;
@@ -70,6 +70,7 @@ public class UserController {
 	public String root(Model model) {
 		model.addAttribute("reqUser", new User());
 		logger.info("root");
+		LogUtils.info("LogUtils info");
 		return "login";
 	}
 
@@ -95,8 +96,8 @@ public class UserController {
 	@RequestMapping("/home")
 	public String home(Model model) {
 		Task task = new Task();
-
 		model.addAttribute("reqTask", task);
+		taskService.findByUserIdStatus(globalController.getLoginUser().getId(), Status.ACTIVE.getValue());
 		// 有効task
 		model.addAttribute("allTask",
 				taskService.findByUserIdStatus(globalController.getLoginUser().getId(), Status.ACTIVE.getValue()));
@@ -118,6 +119,7 @@ public class UserController {
 		List<User> emailList = adminService.findEmail();
 		model.addAttribute("emailList", emailList);
 		model.addAttribute("reqUser", new User());
+		model.addAttribute("reqTask", new Task());
 		return "admin";
 	}
 
@@ -148,6 +150,9 @@ public class UserController {
 		logger.info("/user/register");
 		// 名前重複チェック
 		User user = userService.findByUserName(reqUser.getUsername());
+//		user.getTaskListJPA().stream()
+//			.flatMap(task -> task.getImageListJPA().stream())
+//			.forEach(System.out::println);
 		if (user != null) {
 			redirectAttributes.addFlashAttribute("saveUser", "exist-name");
 			return "redirect:/register";
@@ -170,8 +175,11 @@ public class UserController {
 				// トークン作成
 				String token = UUID.randomUUID().toString();
 				// トークン登録
-				ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
-						LocalDateTime.now().plusMinutes(15), reqUser);
+				ConfirmationToken confirmationToken = new ConfirmationToken(
+						token, 
+						LocalDateTime.now(),
+						LocalDateTime.now().plusMinutes(15), 
+						reqUser);
 				confirmationTokenService.saveConfirmationToken(confirmationToken);
 				// メール送信
 				String link = "http://localhost:8080/confirm?token=" + token;

@@ -38,7 +38,10 @@ public class ImageServiceImpl implements ImageService {
 	private Property property;
 
 	/**
-	 *
+	 * 複数ファイルをディレクトリとDBに保存する
+	 * @param image
+	 * @param task
+	 * @return List<Image>
 	 */
 	@Override
 	public List<Image> saveImage(Image image, Task task) {
@@ -60,8 +63,18 @@ public class ImageServiceImpl implements ImageService {
 		});
 		// ファイル情報を保存
 		List<Image> fileList = image.getFiles().stream().map(multiPartFile -> {
-			Image imageConst = new Image(multiPartFile.getOriginalFilename(),
-					property.getBaseDir() + Integer.toString(task.getId()), null, LocalDateTime.now(), task);
+			Image imageConst = null;
+			try {
+				 imageConst = new Image(
+					multiPartFile.getOriginalFilename(),
+					property.getBaseDir() + Integer.toString(task.getId()), 
+					multiPartFile.getBytes(), 
+					LocalDateTime.now(), 
+					task.getId()
+				);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return imageConst;
 		}).collect(Collectors.toList());
 		List<Image> result = imageRepository.saveAll(fileList);
@@ -105,7 +118,7 @@ public class ImageServiceImpl implements ImageService {
 				// DBから画像ダウンロード
 			} else {
 				ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
-				task.getImages().forEach(file -> {
+				task.getImageListJPA().forEach(file -> {
 					try {
 						ByteArrayInputStream in = new ByteArrayInputStream(file.getImageData());
 						ZipEntry zipEntry = new ZipEntry(file.getImageName());
@@ -130,7 +143,11 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public List<Image> findByImageName(String imageName, int taskId) {
 		return imageMapper.findByImageName(imageName, taskId);
-		
+	}
+
+	@Override
+	public List<Image> findByTaskId(int taskId) {
+		return imageRepository.findByTaskId(taskId);
 	}
 	
 	

@@ -1,5 +1,6 @@
 package com.kosuke.image;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,8 +27,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(name = "images", schema = "sampledb")
-//@IdClass(value=ImageKey.class)
-public class Image {
+public class Image implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,8 +50,11 @@ public class Image {
 	@Column(name="create_date")
 	private LocalDateTime createDate;
 	
+	@Column(name="task_id", nullable = false)
+	private int taskId;
+	
 	@ManyToOne
-	@JoinColumn(name = "task_id", nullable = false)
+	@JoinColumn(name = "task_id", referencedColumnName = "id", insertable=false, updatable=false)
 	private Task task;
 	
 	@Transient
@@ -59,12 +64,12 @@ public class Image {
 		this.files = files;
 	};
 
-	public Image(String imageName, String imagePath, byte[] imageData, LocalDateTime createDate, Task task) {
+	public Image(String imageName, String imagePath, byte[] imageData, LocalDateTime createDate, int taskId) {
 		this.imageName = imageName;
 		this.imagePath = imagePath;
 		this.imageData = imageData;
 		this.createDate = createDate;
-		this.task = task;
+		this.taskId = taskId;
 	}
 	
 	

@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.apache.tomcat.util.codec.binary.Base64;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -21,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +45,7 @@ import com.kosuke.image.ImageService;
 import com.kosuke.utils.OutputCSV;
 import com.kosuke.utils.Status;
 
+import javassist.expr.NewArray;
 import lombok.AllArgsConstructor;
 
 /**
@@ -66,15 +74,28 @@ public class TodoController {
      * @return home
      */
     @RequestMapping(value = {"/task/saveTask"}, method = RequestMethod.POST)
-    public String saveTodo(@ModelAttribute("reqTask") Task reqTask,
-                           final RedirectAttributes redirectAttributes) {
+    public String saveTodo(	@Validated //先頭に配置する
+    						@ModelAttribute("reqTask") Task reqTask,
+    						BindingResult result, //チェックしたいentityの直後に配置する
+    						@ModelAttribute("reqTaskFile") TaskFile reqTaskFile,
+                           	final RedirectAttributes redirectAttributes,
+                           	Model model) {
         logger.info("/task/save");
+        
+        //Validateチェック
+        if(result.hasErrors()) {
+        	List<String> errorList = result.getAllErrors().stream()
+        							.map(e -> e.getDefaultMessage())
+        						 	.collect(Collectors.toList());
+        	redirectAttributes.addFlashAttribute("validationError", errorList);
+        	return "redirect:/home";
+        }
         try {
             reqTask.setCreateDate(LocalDateTime.now());
             reqTask.setStatus(Status.ACTIVE.getValue());
             reqTask.setUserId(globalController.getLoginUser().getId());
-            if(!reqTask.getTaskImage().getOriginalFilename().equals("")) {
-            	taskService.uploadTaskImage(reqTask);
+            if(!reqTaskFile.getTaskImage().getOriginalFilename().equals("")) {
+            	taskService.uploadTaskImage(reqTask ,reqTaskFile);
             }
             taskService.save(reqTask);
             redirectAttributes.addFlashAttribute("msg", "success");
@@ -110,8 +131,57 @@ public class TodoController {
         model.addAttribute("editTodo", editTask);
         return "edit";
     }
-
-
+    
+    
+    /**
+     * 全タスク編集画面へ遷移する
+     * @param userId
+     * @param model
+     * @return
+     */
+    @GetMapping(path = "/task/editAllTask/{userId}")
+    public String editAllTransition(	@PathVariable("userId") int userId,
+    									Model model) {
+    	logger.info("/task/editTaskAll");
+    	List<Task> allTaskByUserId = taskService.findByUserId(userId);
+    	
+    	EditAllTaskList editAllTaskList = new EditAllTaskList();
+    	editAllTaskList.setEditAllTasks(allTaskByUserId);
+    	model.addAttribute("editAllTaskList", editAllTaskList);
+    	return "editAll";
+    }
+    /**
+     * 全タスク編集する
+     * @param userId
+     * @param mav
+     * @return
+     */
+    @PostMapping(path = "/edit/editAllTask/{userId}")
+    public String editTaskAll(	@Validated
+    							@ModelAttribute EditAllTaskList editAllTaskList,
+    							BindingResult result,
+    							RedirectAttributes redirectAttributes) {
+    	logger.info("/edit/editAllTask");
+    	if(result.hasErrors()) {
+    		List<String> errorList = 
+    				result.getAllErrors().stream()
+    				.map(x -> x.getDefaultMessage())
+    				.collect(Collectors.toList());
+    		redirectAttributes.addFlashAttribute("validationError", errorList);
+    		return "redirect:/task/editAllTask/{userId}";
+    	}
+    	try {
+    		if (!taskService.updateAll(editAllTaskList.getEditAllTasks()).isEmpty()) {
+    			redirectAttributes.addFlashAttribute("msg", "更新しました。");
+    		} else {
+    			redirectAttributes.addFlashAttribute("msg", "更新対象がありません。");
+    		}
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("msg", e.getMessage());
+		}
+    	return "redirect:/task/editAllTask/{userId}";
+    }
+    
     /**
      * TASK削除、編集
      * @param operation
@@ -188,8 +258,6 @@ public class TodoController {
                 "attachment;filename=" + nowTime + ".zip");
         
         StreamingResponseBody stream = out -> {
-//            final String home = System.getProperty("user.home");
-//        	File directory = new File(task.getImageDir());
             final File directory = new File(
             		"C:\\Users\\torit\\eclipse-workspace\\todo\\src\\main\\resources\\static\\image\\" + Integer.toString(userId));
             final ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream());
@@ -236,30 +304,56 @@ public class TodoController {
 	}
 	
 	/**
+	 * タスクの画像一覧を表示
+	 * @param taskId
+	 * @param model
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	@GetMapping(path = "/task/image/{taskId}")
+	public String displayTaskImage(	@PathVariable("taskId") int taskId,
+									Model model) throws UnsupportedEncodingException {
+		List<Image> imageList = imageService.findByTaskId(taskId);
+		
+		List<String> encodeImageList = new ArrayList<>();
+		for (Image image : imageList) {
+			if(image.getImageData() == null) continue;
+			String encodeImage = new String(Base64.encodeBase64(image.getImageData()), "ASCII");
+			encodeImageList.add(encodeImage);
+		}
+		model.addAttribute("image", new Image());
+		model.addAttribute("imageList", imageList);
+		model.addAttribute("encodeImageList", encodeImageList);
+		
+		return "images";
+	}
+	
+	/**
 	 * 複数ファイル保存
 	 * @param id
 	 * @param files
 	 * @param model
 	 * @return 
 	 */
-	@PostMapping(path="/image/save/{id}")
-	public String saveImage(@PathVariable("id")  int id, 
-							@ModelAttribute("image") Image image,
+	@PostMapping(path="/image/save/{taskId}")
+	public String saveImage(@PathVariable("taskId")  int taskId, 
+							@ModelAttribute Image image,
 							BindingResult result,
-							Model model) {
+							RedirectAttributes redirectAttributes) {
 		if(result.hasErrors()) {
 			System.out.println(result.getFieldError());
-			model.addAttribute("msg", "failed");
-			return "home";
+			redirectAttributes.addAttribute("msg", "failed");
+			return "redirect:/task/image/{taskId}";
 		}
-		Task task = taskService.findById(id);
+		
+		Task task = taskService.findById(taskId);
 		//ディレクトリにファイルを配置、DBにファイルを保存
-		if(CollectionUtils.isEmpty(imageService.saveImage(image, task))) {
-			model.addAttribute("msg", "success");
+		if(!CollectionUtils.isEmpty(imageService.saveImage(image, task))) {
+			redirectAttributes.addAttribute("msg", "success");
 		} else {
-			model.addAttribute("msg", "fail");
+			redirectAttributes.addAttribute("msg", "fail");
 		}
-		return "home";
+		return "redirect:/task/image/{taskId}";
 	}
 	
 	
@@ -279,7 +373,7 @@ public class TodoController {
 		
 	}
 	
-	@GetMapping(path="image/{imageName}/{id}")
+	@GetMapping(path="/image/{imageName}/{id}")
 	public String getImageFindName(	@PathVariable("imageName") String imageName,
 									@PathVariable("id") int taskId,
 									Model model) {

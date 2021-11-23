@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="description" content="spring-boot thymeleaf | Login ">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<meta charset="UTF-8">
+<title>images</title>
+</head>
+<body>
+  <div class="container">
+    <div th:each="img : ${imageList}">
+      <p th:text="${img.imageName}"></p>
+      <img th:src="@{${img.imagePath}}" />
+      <input type="hidden" th:text="${img.taskId}">
+    </div>
+  </div>
+  
+  <form th:object="${image}" th:action="@{/image/save/{taskId}(taskId=${imageList[0].taskId})}" method="POST" enctype="multipart/form-data">
+    <div class="col-auto">
+      <label for="fileInput" class="form-label">複数ファイル読み込めます</label>
+      <input id="fileInput" th:field="*{files}" type="file" multiple="multiple" class="form-control" placeholder="File Upload" />
+      <button type="submit">ファイルアップロード</button>
+    </div>
+  </form>
+  
+</body>
+</html>

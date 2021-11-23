@@ -11,6 +11,12 @@ public interface AdminMapper {
 
 	List<User> findEmail();
 
-	List<User> findByEmailGetUserTodo(String email);
+	List<User> findByEmailGetUserTodo(String email, String sortColumn);
+
+	Boolean userUpdate(User user);
+
+	Boolean userInsert(User user);
+
+	Boolean deleteTask(Integer id);
 
 }

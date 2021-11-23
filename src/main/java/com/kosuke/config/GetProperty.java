@@ -11,8 +11,7 @@ public class GetProperty {
     
     
     public String getMessage() {
-//        return String.format("Hello! My name is %s", name);
-    	return String.format("Hello! My name is tomato!");
+        return String.format("Hello! My name is %s", name);
     }
 
 }

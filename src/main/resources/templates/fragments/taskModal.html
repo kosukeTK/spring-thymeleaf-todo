@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+  <div th:fragment="taskModal">
+    <div class="modal fade" id="taskModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="taskModalLabel">タスク情報新規作成</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="task_form" th:object="${reqTask}" th:action="@{/admin/editTask}" method="post">
+            <div class="modal-body">
+              <input type="hidden" th:field="*{id}" id="id" />
+              <div class="mb-3">
+                <label for="taskName" class="col-form-label">タスク名</label> <input type="text" th:field="*{taskName}" class="form-control" id="taskName">
+              </div>
+              <div class="mb-3">
+                <label for="category" class="col-form-label">カテゴリー</label> <input type="text" th:field="*{category}" class="form-control" id="category">
+              </div>
+              <div class="mb-3">
+                <label for="description" class="col-form-label">説明</label> <input type="text" th:field="*{description}" class="form-control" id="description">
+              </div>
+              <div class="mb-3">
+                <label for="content" class="col-form-label">内容</label> <input type="text" th:field="*{content}" class="form-control" id="content">
+              </div>
+              <div class="mb-3">
+                <label for="status" class="col-form-label">ステータス</label> <select th:field="*{status}" class="form-select" id="status">
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="PASSIVE">PASSIVE</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="taskDate" class="col-form-label">予定日</label> <input type="date" th:field="*{taskDate}" class="form-select" id="taskDate">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <input id="submit_btn" type="submit" class="btn btn-success" value="Update">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

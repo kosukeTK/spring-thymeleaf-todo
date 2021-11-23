@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+  <div th:fragment="userModal">
+    <!------------------------------          userModal           ----------------------------------------->
+    <div class="modal fade" id="userModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="userModalLabel">ユーザー情報新規作成</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="user_form" th:object="${reqUser}" th:action="@{/admin/editUser}" method="post">
+            <div class="modal-body">
+              <input type="hidden" th:field="*{id}" id="id" />
+              <div class="mb-3">
+                <label for="user-name" class="col-form-label">名前</label> <input type="text" th:field="*{username}" class="form-control" id="user_name">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="col-form-label">メールアドレス</label> <input type="text" th:field="*{email}" class="form-control" id="email">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="col-form-label">パスワード</label> <input type="text" th:field="*{password}" class="form-control" id="password">
+              </div>
+              <div class="mb-3">
+                <label for="role" class="col-form-label">権限</label> <select th:field="*{role}" class="form-select" id="role">
+                  <option value="1">管理者</option>
+                  <option value="2">ユーザー</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="enabled" class="col-form-label">有効</label> <select th:field="*{enabled}" class="form-select" id="enabled">
+                  <option value="false">false</option>
+                  <option value="true">true</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="locked" class="col-form-label">ロック</label> <select th:field="*{locked}" class="form-select" id="locked">
+                  <option value="false">false</option>
+                  <option value="true">true</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <input id="submit_btn" type="submit" class="btn btn-success" value="Update">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,4 @@
+2021-11-24 00:28:27.744  INFO 14788 --- [http-nio-8080-exec-9] com.kosuke.todo.TodoController           : /task/editTaskAll
+2021-11-24 00:28:55.710  INFO 14788 --- [http-nio-8080-exec-10] com.kosuke.user.UserController           : home
+2021-11-24 01:41:13.301  INFO 14788 --- [RMI TCP Connection(78)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-11-24 01:41:13.307  INFO 14788 --- [RMI TCP Connection(78)-127.0.0.1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

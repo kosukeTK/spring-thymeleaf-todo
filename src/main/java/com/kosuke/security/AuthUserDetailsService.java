@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kosuke.user.User;
 import com.kosuke.user.UserService;
@@ -24,6 +25,7 @@ import com.kosuke.user.UserService;
  * @version 1.0
  * Date 2021/8/15.
  */
+@Transactional
 @Service
 public class AuthUserDetailsService implements UserDetailsService {
 
@@ -76,7 +78,7 @@ public class AuthUserDetailsService implements UserDetailsService {
 
         return authList;
     }
-
+    
     private User getUserDetail(String username) {
 
         User user = userService.findByUserName(username);

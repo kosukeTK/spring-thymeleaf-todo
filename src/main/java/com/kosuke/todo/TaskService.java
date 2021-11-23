@@ -23,6 +23,8 @@ public interface TaskService {
     Boolean delete(int id);
 
     Task update(Task task);
+    
+    List<Task> updateAll(List<Task> task);
 
     Task findById(int id);
 
@@ -36,7 +38,7 @@ public interface TaskService {
 
     int findMaxTaskId(int userId);
     
-	void uploadTaskImage(Task reqTask);
+	void uploadTaskImage(Task reqTask, TaskFile reqTaskFile);
 	
 	List<Task> findByUserId(int userId);
 

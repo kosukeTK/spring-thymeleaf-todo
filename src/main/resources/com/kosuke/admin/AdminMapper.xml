@@ -13,20 +13,29 @@
 	</select>
 	
 	<resultMap type="com.kosuke.user.User" id="resultFindByEmailGetUserTodo">
-		<result column="email" property="email" />
+		<result column="id"				property="id" />
+		<result column="email"		property="email" />
 		<result column="username" property="username" />
-		<result column="enabled" property="enabled" />
-		<result column="locked" property="locked" />
-		<result column="role" property="role" />
-		<collection property="taskList"
-			ofType="com.kosuke.todo.Task">
-			<result column="task_name" property="taskName" />
-			<result column="category" property="category" />
-			<result column="description" property="description" />
-			<result column="content" property="content" />
-			<result column="task_date" property="taskDate" />
-			<result column="create_date" property="createDate" />
-			<result column="user_id" property="userId" />
+		<result column="enabled" 	property="enabled" />
+		<result column="locked" 	property="locked" />
+		<result column="role" 		property="role" />
+		<collection property="taskList" ofType="com.kosuke.todo.Task">
+			<result column="task_id"			property="id" />
+			<result column="task_name"		property="taskName" />
+			<result column="category"			property="category" />
+			<result column="description"	property="description" />
+			<result column="content"			property="content" />
+			<result column="status"				property="status" />
+			<result column="task_date"		property="taskDate" />
+			<result column="create_date"	property="createDate" />
+			<result column="user_id"			property="userId" />
+			<collection property="imageList" ofType="com.kosuke.image.Image">
+				<result column="image_id"			property="id" />
+				<result column="image_name"		property="imageName" />
+				<result column="image_path"		property="imagePath" />
+				<result column="image_Data"		property="imageData" />
+				<result column="task_id"			property="taskId" />
+			</collection>
 		</collection>
 	</resultMap>
 	<select id="findByEmailGetUserTodo" resultMap="resultFindByEmailGetUserTodo">
@@ -36,6 +45,7 @@
 						u.enabled,
 						u.locked,
 						u.role,
+						t.id as task_id,
 						t.task_name,
 						t.category,
 						t.description,
@@ -44,10 +54,59 @@
 						t.task_date,
 						t.create_date,
 						t.user_id
-		FROM		user u
-		INNER JOIN task t
+		FROM	user u
+		LEFT JOIN task t
 		ON u.id = t.user_id
 		WHERE u.email = #{email}
+		ORDER BY 
+		<choose>
+			<when test="sortColumn != null and sortColumn != ''">
+				${sortColumn}
+			</when>
+			<otherwise>
+				t.id
+			</otherwise>
+		</choose>
 	</select>
+	
+	<update id="userUpdate" parameterType="com.kosuke.user.User">
+		UPDATE	user
+		SET			email			= #{email},
+						username	= #{username},
+						role			= #{role},
+					<if test="password != null and password != ''">
+						password	= #{password},
+					</if>
+						enabled		= #{enabled},
+						locked		= #{locked}				
+		WHERE		id				= #{id}
+	</update>
+	
+	<insert id="userInsert" useGeneratedKeys="true" keyProperty="id" parameterType="com.kosuke.user.User">
+		INSERT INTO user
+		(
+			email,
+			enabled,
+			locked,
+			password,
+			role,
+			username
+		) 
+		VALUES
+		(
+			#{email},
+			#{enabled},
+			#{locked},
+			#{password},				
+			#{role},
+			#{username}
+		)
+	</insert>
+	
+	<delete id="deleteTask" parameterType="integer">
+		DELETE 
+		FROM 	task
+		WHERE	id = #{id}
+	</delete>
 	
 </mapper>

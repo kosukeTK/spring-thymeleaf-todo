@@ -48,6 +48,11 @@ public class TaskServiceImpl implements TaskService {
     public Task update(Task task) {
         return taskRepository.save(task);
     }
+    
+    @Override
+    public List<Task> updateAll(List<Task> task) {
+    	return (List<Task>) taskRepository.saveAll(task);
+    }
 
     @Override
     public Task findById(int id) {
@@ -66,7 +71,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> findByUserIdStatus(int userId, String status) {
-        //return  taskRepository.findByUserIdStatus(userId, status);
         return  taskRepository.findByUserIdAndStatus(userId, status);
     }
 
@@ -106,21 +110,21 @@ public class TaskServiceImpl implements TaskService {
 	 * @return 
 	 */
 	@Override
-	public void uploadTaskImage(Task reqTask) {
+	public void uploadTaskImage(Task reqTask, TaskFile reqTaskFile) {
 		//ディレクトリ、ファイル名を定義
 		String baseDir = property.getBaseDir();
 		String userId = Integer.toString(reqTask.getUserId());
-		String fileName = reqTask.getTaskImage().getOriginalFilename().toString();
+		String fileName = reqTaskFile.getTaskImage().getOriginalFilename().toString();
 		//タスクIDを定義
 //		String taskId = Integer.toString(findMaxTaskId(reqTask.getUserId()) + 1);
 		//ファイル存在チェック
-		if (reqTask.getTaskImage().isEmpty()) {
+		if (reqTaskFile.getTaskImage().isEmpty()) {
 			return;
 		}
 		//ファイル種類チェック
 		if (!Arrays.asList(
 				ContentType.IMAGE_JPEG.getMimeType(),
-				ContentType.IMAGE_PNG.getMimeType()).contains(reqTask.getTaskImage().getContentType())) {
+				ContentType.IMAGE_PNG.getMimeType()).contains(reqTaskFile.getTaskImage().getContentType())) {
 			return;
 		}
 		try {
@@ -136,7 +140,7 @@ public class TaskServiceImpl implements TaskService {
 //			}
 			//ファイルをアップロード
 			File uploadFile = new File(uploadUserDirFile + "/" + fileName);
-			byte[] bytes = reqTask.getTaskImage().getBytes();
+			byte[] bytes = reqTaskFile.getTaskImage().getBytes();
 			BufferedOutputStream uploadFileStream = 
 					new BufferedOutputStream(new FileOutputStream(uploadFile));
 			uploadFileStream.write(bytes);

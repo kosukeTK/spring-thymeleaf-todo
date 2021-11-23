@@ -32,5 +32,5 @@ public interface TaskRepository extends CrudRepository<Task, Integer> {
     int findMaxTaskId(@Param("userId") int userId);
     
     List<Task> findByUserId(int userId);
-
+    
 }
